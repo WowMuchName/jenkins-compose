@@ -39,8 +39,31 @@ docker-compose up
 
 ## Usage
 
-Jenkins is at https://yourhost:444
-Sonarqube is at https://yourhost:445
+- Jenkins is at https://yourhost:444
+- Sonarqube is at https://yourhost:445
+- Selenium-Grid is at https://yourhost:4444/wd/hub
+- Jenkins Slaves can connect via https://yourhost:5000
 
-Selenium-Grid is at https://yourhost:4444/wd/hub
-Jenkins Slaves can connect via https://yourhost:5000
+
+## Using Jenkins
+
+Jenkins home-directory can be found on the *host*:
+```
+/var/lib/docker/volumes/jenkins-compose_jenkins_home
+```
+When loggin into jenkins for the first time you are challanged to retrieve a file relative to this path.
+
+
+## Using Sonarqube
+
+The initial credentials are username: admin password: admin
+
+
+## Using Sonar-Grid
+
+Services can controll Selenium-Grid via the provided url. While the access is secured through SSL keep in mind
+that everyone can start tests *without* authentification. If this is not desired, remove seleniums section from nginx.conf.
+
+*Keep in mind* however that when Jenkins starts a containerized agent it does not by default have access to the virtual network selenium is on.
+
+
