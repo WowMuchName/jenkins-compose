@@ -32,6 +32,31 @@ services:
       - sonarsql:/var/lib/postgresql
       - sonarsql_data:/var/lib/postgresql/data
 
+  selenium-hub:
+    image: selenium/hub:3.13.0-argon
+    networks:
+      - ci-net
+
+  chrome-1:
+    image: selenium/node-chrome:3.13.0-argon
+    networks:
+      - ci-net
+    depends_on:
+      - selenium-hub
+    environment:
+      - HUB_HOST=selenium-hub
+      - HUB_PORT=4444
+
+  firefox-1:
+    image: selenium/node-firefox:3.13.0-argon
+    networks:
+      - ci-net
+    depends_on:
+      - selenium-hub
+    environment:
+      - HUB_HOST=selenium-hub
+      - HUB_PORT=4444
+
   proxy:
     image: "nginx"
     volumes:
@@ -42,6 +67,7 @@ services:
     ports:
       - "444:444"
       - "445:445"
+      - "4444:4444"
       - "50000:50000"
 
 networks:
