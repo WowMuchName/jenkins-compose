@@ -41,11 +41,12 @@ docker-compose up
 
 - Jenkins is at https://yourhost:444
 - Sonarqube is at https://yourhost:445
-- Selenium-Grid is at https://yourhost:4444/wd/hub
 - Jenkins Slaves can connect via https://yourhost:5000
 
 
 ## Using Jenkins
+
+Jenkins is at https://yourhost:444.
 
 Jenkins home-directory can be found on the *host*:
 ```
@@ -59,11 +60,21 @@ When loggin into jenkins for the first time you are challanged to retrieve a fil
 The initial credentials are username: admin password: admin
 
 
-## Using Sonar-Grid
+## Using Selenium-Grid
 
-Services can controll Selenium-Grid via the provided url. While the access is secured through SSL keep in mind
-that everyone can start tests *without* authentification. If this is not desired, remove seleniums section from nginx.conf.
+Selenium-Grid is available inside the managed docker network (jenkins-compose_ci-net) at http://selenium-hub:4444/wd/hub.
+It is also avaible on the host at localhost:4444
 
-*Keep in mind* however that when Jenkins starts a containerized agent it does not by default have access to the virtual network selenium is on.
+### Usage from outside
+Create an SSH Tunnel mapping 127.0.0.1:4444 on the server to your local computer.
 
-
+### Usage from a Jenkins-Pipeline
+Keep in mind that while the Jenkins-Container is inside the managed network and can access Selenium, docker-build-agents used by Jenkins are not.
+You need to tell Jenkins to explicitly bind the build-agent to the managed network Selenium is on.
+```groovy
+agent {
+    dockerfile {
+        args '--network jenkins-compose_ci-net'
+    }
+}
+```

@@ -36,6 +36,8 @@ services:
     image: selenium/hub:3.13.0-argon
     networks:
       - ci-net
+    ports:
+      - "127.0.0.1:4444:4444"
 
   chrome-1:
     image: selenium/node-chrome:3.13.0-argon
@@ -67,7 +69,6 @@ services:
     ports:
       - "444:444"
       - "445:445"
-      - "4444:4444"
       - "50000:50000"
 
 networks:
